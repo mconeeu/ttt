@@ -8,9 +8,11 @@ import org.bukkit.entity.Player;
 public class TraitorShopInventory extends CoreInventory {
 
     public TraitorShopInventory(Player player) {
-        super("title", player, InventorySlot.ROW_3, InventoryOption.FILL_EMPTY_SLOTS);
+        super("§cTraitor Shop", player, InventorySlot.ROW_3, InventoryOption.FILL_EMPTY_SLOTS);
 
 
 
+
+        openInventory();
     }
 }

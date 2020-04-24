@@ -1,4 +1,4 @@
-package eu.mcone.ttt.objectives;
+package eu.mcone.ttt.scoreboard;
 
 import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
 import eu.mcone.gameapi.api.player.GamePlayer;
@@ -19,7 +19,7 @@ public class EndObjective extends EndGameObjective {
         setDisplayName("§7§l⚔ §c§l§nTTT");
         setScore(6, "");
         setScore(5, "§8» §7Team:");
-        setScore(4, "    §f§l" + gamePlayer.getTeam().getTeam().getPrefix());
+        setScore(4, "    §f§l" + gamePlayer.getTeam().getPrefix());
         setScore(3, "");
         setScore(2, "§8» §7Kills:");
         onReload(corePlayer);

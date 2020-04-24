@@ -8,8 +8,10 @@ import org.bukkit.entity.Player;
 public class DetectiveShopInventory extends CoreInventory {
 
     public DetectiveShopInventory(Player player) {
-        super("", player, InventorySlot.ROW_3, InventoryOption.FILL_EMPTY_SLOTS);
+        super("§1Detective Shop", player, InventorySlot.ROW_3, InventoryOption.FILL_EMPTY_SLOTS);
 
 
+
+        openInventory();
     }
 }

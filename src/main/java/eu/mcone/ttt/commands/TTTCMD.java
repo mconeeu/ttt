@@ -17,12 +17,12 @@ public class TTTCMD extends CoreCommand {
     public boolean onCommand(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
 
-        TTT.getInstance().getMessager().send(player, "§8§m---------- §r§d§lMCONE-Minewar §8§m----------");
-        TTT.getInstance().getMessager().send(player, "§7Entwickelt von §fMarvio, §fDieserDominik");
-        TTT.getInstance().getMessager().send(player, "§r");
-        TTT.getInstance().getMessager().send(player, "§7§oWir bemühen uns darum alle Systeme und Spielmodi so effizient wie möglich zu gestalten.");
-        TTT.getInstance().getMessager().send(player, "§7§oDeshalb sind auch alle von uns verwendeten Plugins ausschließlich selbst entwickelt!");
-        TTT.getInstance().getMessager().send(player, "§8§m---------- §r§d§lMCONE-Minewar §8§m----------");
+        TTT.getInstance().getMessenger().send(player, "§8§m---------- §r§d§lMCONE-Minewar §8§m----------");
+        TTT.getInstance().getMessenger().send(player, "§7Entwickelt von §fMarvio, §fDieserDominik");
+        TTT.getInstance().getMessenger().send(player, "§r");
+        TTT.getInstance().getMessenger().send(player, "§7§oWir bemühen uns darum alle Systeme und Spielmodi so effizient wie möglich zu gestalten.");
+        TTT.getInstance().getMessenger().send(player, "§7§oDeshalb sind auch alle von uns verwendeten Plugins ausschließlich selbst entwickelt!");
+        TTT.getInstance().getMessenger().send(player, "§8§m---------- §r§d§lMCONE-Minewar §8§m----------");
         player.playSound(player.getLocation(), Sound.NOTE_PIANO, 1, 1);
 
 

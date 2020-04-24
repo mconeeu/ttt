@@ -15,23 +15,23 @@ public class RollInventar extends CoreInventory {
 
         setItem(InventorySlot.ROW_2_SLOT_4, new ItemBuilder(Material.WOOL, 1, 14)
                         .displayName("§4Traitor-Pass §8| §fLobbygame")
-                        .lore("§7§oWenn du ein Ticket einlöst", "§7§owirst du Traitor sein!", "", "§8» §f§nLinksklick§8 | §7§oNutzen")
+                        .lore("§7§oWenn du ein Ticket einlöst", "§7§owirst du Traitor sein!", "§7Du hast noch §f0 Tickets", "§8» §f§nLinksklick§8 | §7§oNutzen")
                         .create(),
 
                 e -> {
                     player.closeInventory();
-                    TTT.getInstance().getMessager().send(player,"§7Du wirst §4Traitor §7sein!");
+                    TTT.getInstance().getMessenger().send(player,"§7Du wirst §4Traitor §7sein!");
 
                 });
 
         setItem(InventorySlot.ROW_2_SLOT_6, new ItemBuilder(Material.WOOL, 1, 5)
                         .displayName("§1Detective-Pass §8| §fLobbygame")
-                        .lore("§7§oWenn du ein Ticket einlöst", "§7§owirst du Detective sein!", "", "§8» §f§nLinksklick§8 | §7§oNutzen")
+                        .lore("§7§oWenn du ein Ticket einlöst", "§7§owirst du Detective sein!", "§7Du hast noch §f0 Tickets", "§8» §f§nLinksklick§8 | §7§oNutzen")
                         .create(),
 
                 e -> {
                     player.closeInventory();
-                    TTT.getInstance().getMessager().send(player,"§7Du wirst §1Detective §7sein!");
+                    TTT.getInstance().getMessenger().send(player,"§7Du wirst §1Detective §7sein!");
                 });
 
 

@@ -13,7 +13,7 @@ public class EndState extends EndGameState {
     public void onStop(GameStateStopEvent event) {
         super.onStop(event);
         for (Player player : Bukkit.getOnlinePlayers()) {
-            TTT.getInstance().getMessager().send(player, "§7Der Server startet nun neu...");
+            TTT.getInstance().getMessenger().send(player, "§7Der Server startet nun neu...");
         }
 
         Bukkit.getServer().reload();

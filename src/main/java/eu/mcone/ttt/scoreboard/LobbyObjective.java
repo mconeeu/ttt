@@ -1,4 +1,4 @@
-package eu.mcone.ttt.objectives;
+package eu.mcone.ttt.scoreboard;
 
 import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
 import org.bukkit.Bukkit;

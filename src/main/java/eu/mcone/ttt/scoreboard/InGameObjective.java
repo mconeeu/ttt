@@ -1,4 +1,4 @@
-package eu.mcone.ttt.objectives;
+package eu.mcone.ttt.scoreboard;
 
 import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
 import eu.mcone.gameapi.api.player.GamePlayer;
@@ -18,7 +18,7 @@ public class InGameObjective extends eu.mcone.gameapi.api.scoreboard.InGameObjec
         setDisplayName("§7§l⚔ §c§l§nTTT");
         setScore(9, "");
         setScore(8, "§8» §7Rolle:");
-        setScore(7, "   §f§l" + gamePlayer.getTeam().getTeam().getPrefix());
+        setScore(7, "   §f§l" + gamePlayer.getTeam().getPrefix());
         setScore(6, "");
         setScore(5, "§8» §7Kills:");
         setScore(3, "");

@@ -1,8 +1,13 @@
 package eu.mcone.ttt.listener;
 
 import eu.mcone.coresystem.api.bukkit.CoreSystem;
+import eu.mcone.coresystem.api.bukkit.command.CorePlayerCommand;
+import eu.mcone.coresystem.api.bukkit.npc.NpcData;
+import eu.mcone.coresystem.api.bukkit.npc.data.PlayerNpcData;
 import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
-import eu.mcone.coresystem.api.bukkit.util.Messager;
+import eu.mcone.coresystem.api.bukkit.util.Messenger;
+import eu.mcone.coresystem.api.bukkit.world.CoreLocation;
+import eu.mcone.coresystem.api.core.player.SkinInfo;
 import eu.mcone.gameapi.api.gamestate.common.EndGameState;
 import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.gameapi.api.player.PlayerManager;
@@ -10,6 +15,7 @@ import eu.mcone.ttt.TTT;
 import eu.mcone.ttt.state.LobbyState;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,16 +47,34 @@ public class PlayerDeathListener implements Listener {
             if (killer != null) {
                 GamePlayer gameKiller = TTT.getInstance().getGamePlayer(killer);
                 gameKiller.addKills(1);
-                TTT.getInstance().getMessager().broadcast(Messager.Broadcast.BroadcastMessageTyp.KILL_MESSAGE, "§7Der Spieler §f" + killer.getName() + "§7 hat §f" + player.getName() + "§7 getötet!");
-                killer.addPotionEffect(PotionEffectType.REGENERATION.createEffect(55, 3));
+                TTT.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.KILL_MESSAGE, "§7Der Spieler §f" + killer.getName() + "§7 hat §f" + player.getName() + "§7 getötet!");
                 player.playSound(player.getLocation(), Sound.NOTE_BASS, 1, 1);
                 player.playEffect(player.getLocation(), Effect.INSTANT_SPELL, 1);
             } else {
-                TTT.getInstance().getMessager().broadcast(Messager.Broadcast.BroadcastMessageTyp.DEATH_MESSAGE, "§7Der Spieler §f" + player.getName() + "§7 ist gestorben");
+                TTT.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.DEATH_MESSAGE, "§7Der Spieler §f" + player.getName() + "§7 ist gestorben");
                 player.playSound(player.getLocation(), Sound.NOTE_BASS, 1, 1);
             }
 
             CoreSystem.getInstance().getWorldManager().getWorld(TTT.getInstance().getGameConfig().parseConfig().getLobby()).teleport(player, "game.spectator");
+            NpcData npcData = new NpcData
+                    (
+                            EntityType.PLAYER,
+                            player.getName(),
+                            "§fLeiche",
+                            new CoreLocation(player.getLocation()),
+                            new PlayerNpcData(
+                                    "bedwars",
+                                    "",
+                                    SkinInfo.SkinType.PLAYER,
+                                    false,
+                                    false,
+                                    false,
+                                    null
+                            )
+                    );
+
+            CoreSystem.getInstance().getNpcManager().addNPC(npcData);
+
 
             player.getInventory().setArmorContents(null);
             player.getInventory().clear();
