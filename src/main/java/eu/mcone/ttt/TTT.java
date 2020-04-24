@@ -25,7 +25,7 @@ import org.bukkit.Material;
 
 public class TTT extends GamePlugin {
 
-    protected TTT() {
+    public TTT() {
         super("TTT", ChatColor.RED, "ttt.prefix",
                 Option.BACKPACK_MANAGER_REGISTER_GADGET_CATEGORY,
                 Option.BACKPACK_MANAGER_REGISTER_OUTFIT_CATEGORY,
@@ -45,6 +45,8 @@ public class TTT extends GamePlugin {
     @Override
     public void onGameEnable() {
         instance = this;
+        gameWorld = CoreSystem.getInstance().getWorldManager().getWorld(getGameConfig().parseConfig().getGameWorld());
+
         sendConsoleMessage("§aInitializing new GameState Handler...");
         getGameStateManager().addGameStateFirst(new LobbyState()).addGameState(new InGameState()).addGameState(new EndState()).startGame();
         getPlayerManager();
@@ -58,8 +60,6 @@ public class TTT extends GamePlugin {
         getBackpackManager().setFallbackSlot(0);
 
         getTeamManager().addTeamTablist(new Tablist());
-
-        gameWorld = CoreSystem.getInstance().getWorldManager().getWorld(getGameConfig().parseConfig().getGameWorld());
 
         sendConsoleMessage("§aRegistering Commands and Listeners...");
         registerCommands(
