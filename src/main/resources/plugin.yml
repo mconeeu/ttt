@@ -1,0 +1,6 @@
+name: MCONE-TTT
+authors: [Marvin Hülsmann, Dominik Lippl]
+version: ${project.version}
+main: eu.mcone.ttt.TTT
+depend: [MCONE-BukkitCoreSystem, MCONE-GameAPI]
+
