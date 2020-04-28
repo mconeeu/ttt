@@ -58,7 +58,11 @@ public class GeneralPlayerListener implements Listener {
 
     @EventHandler
     public void on(BlockBreakEvent e) {
-        e.setCancelled(true);
+        if (e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+            e.setCancelled(false);
+        } else {
+            e.setCancelled(true);
+        }
     }
 
 

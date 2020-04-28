@@ -4,9 +4,9 @@ import lombok.Getter;
 
 public enum Role {
 
-    INNOCENT("innocent"),
-    DETECTIVE("detective"),
-    TRAITOR("traitor");
+    INNOCENT("§aInnocent"),
+    DETECTIVE("§1Detective"),
+    TRAITOR("§cTraitor");
 
     @Getter
     private final String name;
@@ -14,4 +14,15 @@ public enum Role {
     Role(String name) {
         this.name = name;
     }
+
+    public static Role getRoleByName(String name) {
+        for (Role role : values()) {
+            if (role.getName().equals(name)) {
+                return role;
+            }
+        }
+
+        return null;
+    }
+
 }

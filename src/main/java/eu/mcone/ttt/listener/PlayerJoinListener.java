@@ -8,9 +8,11 @@ import eu.mcone.gameapi.api.gamestate.common.InGameState;
 import eu.mcone.gameapi.api.player.PlayerManager;
 import eu.mcone.gameapi.api.team.TeamManager;
 import eu.mcone.ttt.TTT;
+import eu.mcone.ttt.player.TTTPlayer;
 import eu.mcone.ttt.scoreboard.LobbyObjective;
 import eu.mcone.ttt.state.EndState;
 import eu.mcone.ttt.state.LobbyState;
+import eu.mcone.ttt.state.MiddleState;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -33,21 +35,27 @@ public class PlayerJoinListener implements Listener {
         player.setExp(0);
         player.setLevel(0);
 
+        new TTTPlayer(e.getCorePlayer());
         player.getInventory().setItem(8, InventoryTriggerListener.QUIT_ITEM);
 
         if (TTT.getInstance().getGameStateManager().getRunning() instanceof LobbyState) {
             e.getCorePlayer().getScoreboard().setNewObjective(new LobbyObjective());
 
-            for (CorePlayer all : CoreSystem.getInstance().getOnlineCorePlayers()) {
-                all.getScoreboard().getObjective(DisplaySlot.SIDEBAR).reload();
+            for (CorePlayer cp : CoreSystem.getInstance().getOnlineCorePlayers()) {
+                if (cp.getScoreboard() != null) {
+                    if (cp.getScoreboard().getObjective(DisplaySlot.SIDEBAR) != null) {
+                        cp.getScoreboard().getObjective(DisplaySlot.SIDEBAR).reload();
+                    }
+                }
             }
 
-            player.getInventory().setItem(6, new ItemBuilder(Material.STORAGE_MINECART, 1, 0).displayName("§3§lRucksack §8» §7§oZeige deine gesammelten Items an").create());
-            player.getInventory().setItem(7, TeamManager.TEAM);
+            player.getInventory().setItem(7, new ItemBuilder(Material.STORAGE_MINECART, 1, 0).displayName("§3§lRucksack §8» §7§oZeige deine gesammelten Items an").create());
+            player.getInventory().setItem(0, InventoryTriggerListener.ROLL_ITEM);
 
             CoreSystem.getInstance().getWorldManager().getWorld(TTT.getInstance().getGameConfig().parseConfig().getLobby()).teleport(player, "spawn");
-        } else if (TTT.getInstance().getGameStateManager().getRunning() instanceof InGameState) {
+        } else if (TTT.getInstance().getGameStateManager().getRunning() instanceof InGameState || TTT.getInstance().getGameStateManager().getRunning() instanceof MiddleState) {
             player.getInventory().setArmorContents(null);
+            player.getInventory().setChestplate(null);
             player.getInventory().clear();
 
             player.getInventory().setItem(7, PlayerManager.SPECTATOR);
@@ -65,4 +73,4 @@ public class PlayerJoinListener implements Listener {
             }
         }
     }
-    }
+}

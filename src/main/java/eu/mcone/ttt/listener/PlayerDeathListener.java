@@ -12,6 +12,7 @@ import eu.mcone.gameapi.api.gamestate.common.EndGameState;
 import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.gameapi.api.player.PlayerManager;
 import eu.mcone.ttt.TTT;
+import eu.mcone.ttt.roles.Role;
 import eu.mcone.ttt.state.LobbyState;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
@@ -47,11 +48,41 @@ public class PlayerDeathListener implements Listener {
             if (killer != null) {
                 GamePlayer gameKiller = TTT.getInstance().getGamePlayer(killer);
                 gameKiller.addKills(1);
-                TTT.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.KILL_MESSAGE, "§7Der Spieler §f" + killer.getName() + "§7 hat §f" + player.getName() + "§7 getötet!");
+                ;
+
+                TTT.getInstance().getMessenger().send(player, "§7Der Spieler §f" + killer.getName() + "§7 hat dich getötet!");
+                TTT.getInstance().getMessenger().send(killer, "§7Du hast §f" + player.getName() + "§7 getötet");
+
+                if (gamePlayer.getTeam().getName().equalsIgnoreCase(Role.TRAITOR.getName())) {
+                    if (gameKiller.getTeam().getName().equalsIgnoreCase(Role.DETECTIVE.getName()) || gameKiller.getTeam().getName().equalsIgnoreCase(Role.INNOCENT.getName())) {
+                        killer.setLevel(killer.getLevel() + 2);
+                        TTT.getInstance().getMessenger().send(player, "§8[§a+20 Karma§8]");
+                        gamePlayer.addGoals(20);
+                    }
+                    player.setLevel(2);
+                } else if (gamePlayer.getTeam().getName().equalsIgnoreCase(Role.DETECTIVE.getName())) {
+                    if (gameKiller.getTeam().getName().equalsIgnoreCase(Role.TRAITOR.getName())) {
+                        killer.setLevel(killer.getLevel() + 3);
+                    } else {
+                        TTT.getInstance().getMessenger().send(killer, "Du hast einen Detective als Innocent getötet §8[§a-40 Karma§8]");
+                        if (gamePlayer.getCorePlayer().getStats().getGoal() >= 40) {
+                            gamePlayer.getCorePlayer().getStats().removeGoals(40);
+                        }
+                    }
+                } else if (gamePlayer.getTeam().getName().equalsIgnoreCase(Role.INNOCENT.getName())) {
+                    if (gameKiller.getTeam().getName().equalsIgnoreCase(Role.TRAITOR.getName())) {
+                        killer.setLevel(killer.getLevel() + 2);
+                    } else {
+                        TTT.getInstance().getMessenger().send(killer, "Du hast einen Innocent getötet §8[§a-20 Karma§8]");
+                        if (gamePlayer.getCorePlayer().getStats().getGoal() >= 20) {
+                            gamePlayer.getCorePlayer().getStats().removeGoals(20);
+                        }
+                    }
+                }
+
                 player.playSound(player.getLocation(), Sound.NOTE_BASS, 1, 1);
                 player.playEffect(player.getLocation(), Effect.INSTANT_SPELL, 1);
             } else {
-                TTT.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.DEATH_MESSAGE, "§7Der Spieler §f" + player.getName() + "§7 ist gestorben");
                 player.playSound(player.getLocation(), Sound.NOTE_BASS, 1, 1);
             }
 
@@ -63,7 +94,7 @@ public class PlayerDeathListener implements Listener {
                             "§fLeiche",
                             new CoreLocation(player.getLocation()),
                             new PlayerNpcData(
-                                    "bedwars",
+                                    "zombie",
                                     "",
                                     SkinInfo.SkinType.PLAYER,
                                     false,
@@ -86,8 +117,12 @@ public class PlayerDeathListener implements Listener {
                     .message("§c§oDu bist gestorben")
                     .send(player);
 
-            for (CorePlayer all : CoreSystem.getInstance().getOnlineCorePlayers()) {
-                all.getScoreboard().getObjective(DisplaySlot.SIDEBAR).reload();
+            for (CorePlayer cp : CoreSystem.getInstance().getOnlineCorePlayers()) {
+                if (cp.getScoreboard() != null) {
+                    if (cp.getScoreboard().getObjective(DisplaySlot.SIDEBAR) != null) {
+                        cp.getScoreboard().getObjective(DisplaySlot.SIDEBAR).reload();
+                    }
+                }
             }
         }
 

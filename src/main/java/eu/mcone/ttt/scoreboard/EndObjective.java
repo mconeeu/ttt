@@ -18,7 +18,7 @@ public class EndObjective extends EndGameObjective {
         GamePlayer gamePlayer = TTT.getInstance().getGamePlayer(corePlayer.getUuid());
         setDisplayName("§7§l⚔ §c§l§nTTT");
         setScore(6, "");
-        setScore(5, "§8» §7Team:");
+        setScore(5, "§8» §7Rolle:");
         setScore(4, "    §f§l" + gamePlayer.getTeam().getPrefix());
         setScore(3, "");
         setScore(2, "§8» §7Kills:");

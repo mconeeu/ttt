@@ -7,7 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class EndState extends EndGameState {
-    public EndState() {}
+    public EndState() {
+    }
 
     @Override
     public void onStop(GameStateStopEvent event) {
@@ -16,6 +17,6 @@ public class EndState extends EndGameState {
             TTT.getInstance().getMessenger().send(player, "§7Der Server startet nun neu...");
         }
 
-        Bukkit.getServer().reload();
+        Bukkit.getServer().shutdown();
     }
 }

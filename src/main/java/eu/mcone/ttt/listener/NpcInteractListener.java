@@ -22,7 +22,6 @@ public class NpcInteractListener implements Listener {
         if (e.getNpc().getData().getType().equals(EntityType.PLAYER) && e.getAction().equals(PacketPlayInUseEntity.EnumEntityUseAction.INTERACT)) {
             GamePlayer gamePlayer = TTT.getInstance().getGamePlayer(player);
 
-            //TODO MESSAGE ->
             TTT.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.INFO_MESSAGE, "§7Die Leiche von §f" + player.getName() + "§7 wurde Identifiziert er war ein " + gamePlayer.getTeam().getName());
 
             e.getNpc().changeDisplayname(gamePlayer.getTeam().getColor() + e.getNpc().getData().getName());

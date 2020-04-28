@@ -16,15 +16,18 @@ public class InGameObjective extends eu.mcone.gameapi.api.scoreboard.InGameObjec
         GamePlayer gamePlayer = TTT.getInstance().getGamePlayer(corePlayer.getUuid());
 
         setDisplayName("§7§l⚔ §c§l§nTTT");
+        setScore(12, "");
+        setScore(11, "§8» §7Karma:");
+        setScore(10, "   §f§l" + gamePlayer.getCorePlayer().getStats().getGoal());
         setScore(9, "");
         setScore(8, "§8» §7Rolle:");
         setScore(7, "   §f§l" + gamePlayer.getTeam().getPrefix());
         setScore(6, "");
-        setScore(5, "§8» §7Kills:");
+        setScore(5, "§8» §7Rollen-Punkte:");
+        setScore(4, "  §f§l" + gamePlayer.bukkit().getLevel());
         setScore(3, "");
         setScore(2, "§8» §7Lebene Spieler:");
         onReload(corePlayer);
-
     }
 
     @Override
@@ -32,7 +35,8 @@ public class InGameObjective extends eu.mcone.gameapi.api.scoreboard.InGameObjec
         super.onReload(corePlayer);
 
         GamePlayer gamePlayer = TTT.getInstance().getGamePlayer(corePlayer.getUuid());
-        setScore(4, "   §f§l" + gamePlayer.getRoundKills());
-        setScore(1, "   §f§l" + TTT.getInstance().getPlayerManager().getPlaying().size());
+        setScore(10, "   §f§l" + gamePlayer.getCorePlayer().getStats().getGoal());
+        setScore(4, "    §f§l" + gamePlayer.bukkit().getLevel());
+        setScore(1, "    §f§l" + TTT.getInstance().getPlayerManager().getPlaying().size());
     }
 }
