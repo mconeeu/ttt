@@ -78,7 +78,6 @@ public class TTT extends GamePlugin {
                 new ShopCMD(),
                 new TTTCMD(),
                 new PassesCMD()
-
         );
 
         registerEvents(
@@ -96,10 +95,7 @@ public class TTT extends GamePlugin {
                 new HealBlockGadget()
         );
 
-
         sendConsoleMessage("§aVersion §f" + this.getDescription().getVersion() + "§a enabled...");
-
-
     }
 
     @Override
