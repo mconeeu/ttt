@@ -42,6 +42,9 @@ public class LobbyState extends LobbyGameState {
         int detectives = (int) (playing * DETECTIVES_PROBABILITY) > 0 ? (int) (playing * DETECTIVES_PROBABILITY) : 1;
         int traitors = (int) (playing * TRAITOR_PROBABILITY) > 0 ? (int) (playing * TRAITOR_PROBABILITY) : 1;
 
+        int detectiveSize = 0;
+        int traitorSize = 0;
+
         List<Player> players = new ArrayList<>(TTT.getInstance().getPlayerManager().getPlaying());
         Map<GamePlayer, Role> playerRoles = new HashMap<>();
 
@@ -90,7 +93,6 @@ public class LobbyState extends LobbyGameState {
             }
         }
 
-        int innocents = players.size();
         for (Player p : players) {
             playerRoles.put(TTT.getInstance().getGamePlayer(p), Role.INNOCENT);
         }
@@ -99,15 +101,16 @@ public class LobbyState extends LobbyGameState {
         Team traitorTeam = TTT.getInstance().getTeamManager().getTeam(Role.TRAITOR.getName());
         Team innocentTeam = TTT.getInstance().getTeamManager().getTeam(Role.INNOCENT.getName());
 
-        int i = 0;
+        detectiveTeam.setSize(detectiveSize);
+        traitorTeam.setSize(traitorSize);
+        innocentTeam.setSize(playerRoles.size() - (detectiveSize + traitorSize));
+
         for (Map.Entry<GamePlayer, Role> role : playerRoles.entrySet()) {
             switch (role.getValue()) {
                 case DETECTIVE:
-                    detectives++;
                     role.getKey().setTeam(detectiveTeam);
                     break;
                 case TRAITOR:
-                    traitors++;
                     role.getKey().setTeam(traitorTeam);
                     break;
                 case INNOCENT:
@@ -141,11 +144,5 @@ public class LobbyState extends LobbyGameState {
                 p.teleport(location);
             } while (location != null && !inUse.contains(location));
         }
-
-        detectiveTeam.setSize(detectives);
-        traitorTeam.setSize(traitors);
-        innocentTeam.setSize(innocents);
-
-        System.out.println(TTT.getInstance().getTeamManager().getTeams());
     }
 }
