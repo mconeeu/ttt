@@ -3,6 +3,7 @@ package eu.mcone.ttt.state;
 import eu.mcone.coresystem.api.bukkit.CoreSystem;
 import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
 import eu.mcone.coresystem.api.bukkit.world.CoreLocation;
+import eu.mcone.gameapi.api.GameAPI;
 import eu.mcone.gameapi.api.event.gamestate.GameStateStopEvent;
 import eu.mcone.gameapi.api.gamestate.common.LobbyGameState;
 import eu.mcone.gameapi.api.player.GamePlayer;
@@ -44,23 +45,30 @@ public class LobbyState extends LobbyGameState {
         List<Player> players = new ArrayList<>(TTT.getInstance().getPlayerManager().getPlaying());
         Map<GamePlayer, Role> playerRoles = new HashMap<>();
 
+        List<TTTPlayer> redeemedPassPlayers = new ArrayList<>();
         for (TTTPlayer ttp : TTT.getInstance().getOnlineTTTPlayers()) {
             if (ttp.hasRedeemedPass()) {
-                Role role = ttp.getRedeemedPass().equals(TTTPass.TRAITOR) ? Role.TRAITOR : Role.DETECTIVE;
+                redeemedPassPlayers.add(ttp);
+            }
+        }
 
-                if ((role.equals(Role.TRAITOR) ? traitors : detectives) > 0) {
-                    playerRoles.put(TTT.getInstance().getGamePlayer(ttp.bukkit()), role);
-                    players.remove(ttp.bukkit());
-                    ttp.setPassRedeemed();
+        for (int i = redeemedPassPlayers.size(); i >= 1; i--) {
+            TTTPlayer ttp = redeemedPassPlayers.get(ROLE_RANDOM.nextInt(i));
+            Role role = ttp.getRedeemedPass().equals(TTTPass.TRAITOR) ? Role.TRAITOR : Role.DETECTIVE;
 
-                    if (ttp.getRedeemedPass().equals(TTTPass.TRAITOR)) {
-                        traitors--;
-                    } else if (ttp.getRedeemedPass().equals(TTTPass.DETECTIVE)) {
-                        detectives--;
-                    }
-                } else {
-                    TTT.getInstance().getMessenger().send(ttp.bukkit(), "§7Dein §f" + ttp.getRedeemedPass() + " §7konnte nicht eingelöst werden, es sind zu wenig Spieler online!");
+            if ((role.equals(Role.TRAITOR) ? traitors : detectives) > 0) {
+                playerRoles.put(TTT.getInstance().getGamePlayer(ttp.bukkit()), role);
+                players.remove(ttp.bukkit());
+                redeemedPassPlayers.remove(ttp);
+                ttp.setPassRedeemed();
+
+                if (ttp.getRedeemedPass().equals(TTTPass.TRAITOR)) {
+                    traitors--;
+                } else if (ttp.getRedeemedPass().equals(TTTPass.DETECTIVE)) {
+                    detectives--;
                 }
+            } else {
+                TTT.getInstance().getMessenger().send(ttp.bukkit(), "§4Dein §c" + ttp.getRedeemedPass() + " §4konnte nicht eingelöst werden, es sind zu wenig Spieler online!");
             }
         }
 
@@ -91,17 +99,15 @@ public class LobbyState extends LobbyGameState {
         Team traitorTeam = TTT.getInstance().getTeamManager().getTeam(Role.TRAITOR.getName());
         Team innocentTeam = TTT.getInstance().getTeamManager().getTeam(Role.INNOCENT.getName());
 
-        detectiveTeam.setSize(detectives);
-        traitorTeam.setSize(traitors);
-        innocentTeam.setSize(innocents);
-
         int i = 0;
         for (Map.Entry<GamePlayer, Role> role : playerRoles.entrySet()) {
             switch (role.getValue()) {
                 case DETECTIVE:
+                    detectives++;
                     role.getKey().setTeam(detectiveTeam);
                     break;
                 case TRAITOR:
+                    traitors++;
                     role.getKey().setTeam(traitorTeam);
                     break;
                 case INNOCENT:
@@ -116,9 +122,9 @@ public class LobbyState extends LobbyGameState {
             p.getInventory().clear();
             p.getInventory().setItem(8, InventoryTriggerListener.IDENTIFY_STICK);
             if (gp.getTeam().getName().equalsIgnoreCase(Role.DETECTIVE.getName())) {
-                p.getInventory().setChestplate(ItemBuilder.createLeatherArmorItem(Material.LEATHER_CHESTPLATE, Color.BLUE).create());
+                p.getInventory().setChestplate(ItemBuilder.createLeatherArmorItem(Material.LEATHER_CHESTPLATE, Color.BLUE).unbreakable(true).create());
             } else {
-                p.getInventory().setChestplate(ItemBuilder.createLeatherArmorItem(Material.LEATHER_CHESTPLATE, Color.GREEN).create());
+                p.getInventory().setChestplate(ItemBuilder.createLeatherArmorItem(Material.LEATHER_CHESTPLATE, Color.GREEN).unbreakable(true).create());
             }
 
 
@@ -135,5 +141,11 @@ public class LobbyState extends LobbyGameState {
                 p.teleport(location);
             } while (location != null && !inUse.contains(location));
         }
+
+        detectiveTeam.setSize(detectives);
+        traitorTeam.setSize(traitors);
+        innocentTeam.setSize(innocents);
+
+        System.out.println(TTT.getInstance().getTeamManager().getTeams());
     }
 }

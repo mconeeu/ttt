@@ -29,9 +29,7 @@ public class EntityDamageListener implements Listener {
             if (e.getCause().equals(EntityDamageEvent.DamageCause.VOID)) {
                 CoreSystem.getInstance().getWorldManager().getWorld(TTT.getInstance().getGameConfig().parseConfig().getLobby()).teleport(player, "spawn");
             }
-            e.setCancelled(true);
         }
 
-        System.out.println("damageEvent " + e.getCause() + " cancelled: " + e.isCancelled());
     }
 }

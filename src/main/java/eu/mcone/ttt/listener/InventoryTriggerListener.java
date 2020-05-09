@@ -71,6 +71,7 @@ public class InventoryTriggerListener implements Listener {
                 if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock() != null) {
                     Material clicked = e.getClickedBlock().getType();
                     switch (clicked) {
+                        case TRAPPED_CHEST:
                         case CHEST: {
                             TTTItem item = TTT.getInstance().getTTTPlayer(p).getAndSaveNewTTTItem();
 
@@ -143,7 +144,7 @@ public class InventoryTriggerListener implements Listener {
                                                             TTT.getInstance().getGameWorld().getBlockLocation("tester-block-7").getBlock().setType(Material.IRON_BLOCK);
                                                             TTT.getInstance().getGameWorld().getBlockLocation("tester-block-8").getBlock().setType(Material.IRON_BLOCK);
                                                             TTT.getInstance().getGameWorld().getBlockLocation("tester-block-9").getBlock().setType(Material.IRON_BLOCK);
-                                                        }, 37L);
+                                                        }, 17L);
                                                     }, 12L);
                                                 }
                                                 Bukkit.getScheduler().runTaskLater(TTT.getGamePlugin(), () -> {

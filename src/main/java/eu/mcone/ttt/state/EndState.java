@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 public class EndState extends EndGameState {
     public EndState() {
+        super();
     }
 
     @Override

@@ -19,7 +19,7 @@ public class PassesCMD extends CorePlayerCommand {
     public boolean onPlayerCommand(Player p, String[] args) {
         if (args.length == 4) {
             if (args[0].equalsIgnoreCase("add")) {
-                if (args[1].equalsIgnoreCase("traitorpass")) {
+                if (args[1].equalsIgnoreCase("traitor")) {
                     Player target = Bukkit.getPlayer(args[2]);
                     if (target != null) {
                         TTTPlayer tttPlayer = TTT.getInstance().getTTTPlayer(target);
@@ -33,7 +33,7 @@ public class PassesCMD extends CorePlayerCommand {
                     } else {
                         TTT.getInstance().getMessenger().send(p, "§4Der Spieler ist Offline");
                     }
-                } else if (args[1].equalsIgnoreCase("detectivepass")) {
+                } else if (args[1].equalsIgnoreCase("detective")) {
                     Player target = Bukkit.getPlayer(args[2]);
                     if (target != null) {
                         TTTPlayer tttPlayer = TTT.getInstance().getTTTPlayer(target);
@@ -48,10 +48,10 @@ public class PassesCMD extends CorePlayerCommand {
                         TTT.getInstance().getMessenger().send(p, "§4Der Spieler ist Offline");
                     }
                 } else {
-                    TTT.getInstance().getMessenger().send(p, "§cBitte benutze: §4/pass <add|remove> <traitorpass|detectivepass> <[Spieler]> <Anzahl>!");
+                    TTT.getInstance().getMessenger().send(p, "§cBitte benutze: §4/pass <add|remove> <traitor|dective> <[Spieler]> <Anzahl>!");
                 }
             } else if (args[0].equalsIgnoreCase("remove")) {
-                if (args[1].equalsIgnoreCase("traitorpass")) {
+                if (args[1].equalsIgnoreCase("traitor")) {
                     Player target = Bukkit.getPlayer(args[2]);
                     if (target != null) {
                         TTTPlayer tttPlayer = TTT.getInstance().getTTTPlayer(target);
@@ -65,7 +65,7 @@ public class PassesCMD extends CorePlayerCommand {
                     } else {
                         TTT.getInstance().getMessenger().send(p, "§4Der Spieler ist Offline");
                     }
-                } else if (args[1].equalsIgnoreCase("detectivepass")) {
+                } else if (args[1].equalsIgnoreCase("detective")) {
                     Player target = Bukkit.getPlayer(args[2]);
                     if (target != null) {
                         TTTPlayer tttPlayer = TTT.getInstance().getTTTPlayer(target);
@@ -82,11 +82,11 @@ public class PassesCMD extends CorePlayerCommand {
                         TTT.getInstance().getMessenger().send(p, "§4Der Spieler ist Offline");
                     }
                 } else {
-                    TTT.getInstance().getMessenger().send(p, "§cBitte benutze: §4/pass <add|remove> <traitorpass|detectivepass> <[Spieler]> <Anzahl>!");
+                    TTT.getInstance().getMessenger().send(p, "§cBitte benutze: §4/pass <add|remove> <traitor|dective> <[Spieler]> <Anzahl>!");
                 }
             }
         } else {
-            TTT.getInstance().getMessenger().send(p, "§cBitte benutze: §4/pass <add|remove> <traitorpass|detectivepass> <[Spieler]> <Anzahl>!");
+            TTT.getInstance().getMessenger().send(p, "§cBitte benutze: §4/pass <add|remove> <traitor|dective> <[Spieler]> <Anzahl>!");
         }
 
 

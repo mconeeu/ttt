@@ -40,7 +40,8 @@ public class TTT extends GamePlugin {
                 Option.BACKPACK_MANAGER_REGISTER_TRAIL_CATEGORY,
                 Option.BACKPACK_MANAGER_REGISTER_EXCLUSIVE_CATEGORY,
                 Option.BACKPACK_MANAGER_USE_RANK_BOOTS,
-                Option.USE_CUSTOM_TEAMS);
+                Option.USE_CUSTOM_TEAMS,
+                Option.WIN_METHOD_DEACTIVATED);
     }
 
     @Getter
