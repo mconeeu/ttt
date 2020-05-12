@@ -48,7 +48,7 @@ public class PassesCMD extends CorePlayerCommand {
                         TTT.getInstance().getMessenger().send(p, "§4Der Spieler ist Offline");
                     }
                 } else {
-                    TTT.getInstance().getMessenger().send(p, "§cBitte benutze: §4/pass <add|remove> <traitor|dective> <[Spieler]> <Anzahl>!");
+                    TTT.getInstance().getMessenger().send(p, "§4Bitte benutze: §4/pass <add|remove> <traitor|dective> <[Spieler]> <Anzahl>!");
                 }
             } else if (args[0].equalsIgnoreCase("remove")) {
                 if (args[1].equalsIgnoreCase("traitor")) {
@@ -82,11 +82,11 @@ public class PassesCMD extends CorePlayerCommand {
                         TTT.getInstance().getMessenger().send(p, "§4Der Spieler ist Offline");
                     }
                 } else {
-                    TTT.getInstance().getMessenger().send(p, "§cBitte benutze: §4/pass <add|remove> <traitor|dective> <[Spieler]> <Anzahl>!");
+                    TTT.getInstance().getMessenger().send(p, "§4Bitte benutze: §4/pass <add|remove> <traitor|dective> <[Spieler]> <Anzahl>!");
                 }
             }
         } else {
-            TTT.getInstance().getMessenger().send(p, "§cBitte benutze: §4/pass <add|remove> <traitor|dective> <[Spieler]> <Anzahl>!");
+            TTT.getInstance().getMessenger().send(p, "§4Bitte benutze: §4/pass <add|remove> <traitor|dective> <[Spieler]> <Anzahl>!");
         }
 
 

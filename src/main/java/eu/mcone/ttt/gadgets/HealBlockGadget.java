@@ -33,9 +33,7 @@ public class HealBlockGadget implements Listener {
             player.playSound(player.getLocation(), Sound.FIREWORK_TWINKLE, 1, 1);
             e.setCancelled(false);
         }
-
     }
-
 
     @EventHandler
     public void on(PlayerInteractEvent e) {
@@ -62,5 +60,4 @@ public class HealBlockGadget implements Listener {
             }
         }
     }
-
 }

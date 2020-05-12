@@ -86,10 +86,9 @@ public class TTT extends GamePlugin {
                 new PlayerDeathListener(),
                 new PlayerJoinListener(),
                 new PlayerQuitListener(),
-                new TeamWonListener(),
                 new EntityDamageListener(),
                 new EntityDamageByEntityListener(),
-                new GameDrawListener(),
+                new GameEndListener(),
                 new PlayerMoveListener(),
                 new NpcInteractListener(),
                 new HealBlockGadget()

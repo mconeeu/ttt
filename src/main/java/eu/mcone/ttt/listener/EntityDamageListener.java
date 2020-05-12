@@ -18,16 +18,22 @@ public class EntityDamageListener implements Listener {
     public void on(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player) {
             Player player = (Player) e.getEntity();
+
             if (TTT.getInstance().getGameStateManager().getRunning() instanceof InGameState) {
                 EntityDamageEvent.DamageCause damageCause = e.getCause();
-                if (damageCause == EntityDamageEvent.DamageCause.LAVA || damageCause == EntityDamageEvent.DamageCause.FIRE || damageCause == EntityDamageEvent.DamageCause.FIRE_TICK || damageCause == EntityDamageEvent.DamageCause.FALL) {
+
+                if (damageCause.equals(EntityDamageEvent.DamageCause.LAVA)
+                        || damageCause.equals(EntityDamageEvent.DamageCause.FIRE)
+                        || damageCause.equals(EntityDamageEvent.DamageCause.FIRE_TICK)
+                        || damageCause.equals(EntityDamageEvent.DamageCause.FALL)) {
                     e.setCancelled(false);
                 }
             } else {
                 e.setCancelled(true);
-            }
-            if (e.getCause().equals(EntityDamageEvent.DamageCause.VOID)) {
-                CoreSystem.getInstance().getWorldManager().getWorld(TTT.getInstance().getGameConfig().parseConfig().getLobby()).teleport(player, "spawn");
+                
+                if (e.getCause().equals(EntityDamageEvent.DamageCause.VOID)) {
+                    CoreSystem.getInstance().getWorldManager().getWorld(TTT.getInstance().getGameConfig().parseConfig().getLobby()).teleport(player, "spawn");
+                }
             }
         }
 

@@ -26,7 +26,7 @@ public class LobbyState extends LobbyGameState {
     private static final double DETECTIVES_PROBABILITY = 0.2, TRAITOR_PROBABILITY = 0.3;
     private static final Random ROLE_RANDOM = new Random();
     private static final List<Location> SPAWNS = new ArrayList<>();
-    private List<Location> inUse = new ArrayList<>();
+    private final List<Location> inUse = new ArrayList<>();
 
     static {
         for (Map.Entry<String, CoreLocation> location : TTT.getInstance().getGameWorld().getLocations().entrySet()) {
@@ -42,12 +42,14 @@ public class LobbyState extends LobbyGameState {
         int detectives = (int) (playing * DETECTIVES_PROBABILITY) > 0 ? (int) (playing * DETECTIVES_PROBABILITY) : 1;
         int traitors = (int) (playing * TRAITOR_PROBABILITY) > 0 ? (int) (playing * TRAITOR_PROBABILITY) : 1;
 
-        int detectiveSize = 0;
-        int traitorSize = 0;
-
         List<Player> players = new ArrayList<>(TTT.getInstance().getPlayerManager().getPlaying());
         Map<GamePlayer, Role> playerRoles = new HashMap<>();
 
+        /*
+         * redeem passes
+         */
+
+        //get users wich has redeemed passes
         List<TTTPlayer> redeemedPassPlayers = new ArrayList<>();
         for (TTTPlayer ttp : TTT.getInstance().getOnlineTTTPlayers()) {
             if (ttp.hasRedeemedPass()) {
@@ -55,11 +57,14 @@ public class LobbyState extends LobbyGameState {
             }
         }
 
+        //calculate users that should be able to redeem pass and do it
         for (int i = redeemedPassPlayers.size(); i >= 1; i--) {
             TTTPlayer ttp = redeemedPassPlayers.get(ROLE_RANDOM.nextInt(i));
             Role role = ttp.getRedeemedPass().equals(TTTPass.TRAITOR) ? Role.TRAITOR : Role.DETECTIVE;
 
+            //check if role slots are available tp redeem pass for
             if ((role.equals(Role.TRAITOR) ? traitors : detectives) > 0) {
+                //redeem pass
                 playerRoles.put(TTT.getInstance().getGamePlayer(ttp.bukkit()), role);
                 players.remove(ttp.bukkit());
                 redeemedPassPlayers.remove(ttp);
@@ -75,7 +80,13 @@ public class LobbyState extends LobbyGameState {
             }
         }
 
-        for (int i = playing; i >= 1; i--) {
+
+        /*
+         * set other players team roles
+         */
+
+        //set free slots for detective and traitor
+        for (int i = players.size(); i >= 1; i--) {
             if (detectives > 0) {
                 Player p = players.get(ROLE_RANDOM.nextInt(i));
                 playerRoles.put(TTT.getInstance().getGamePlayer(p), Role.DETECTIVE);
@@ -93,17 +104,41 @@ public class LobbyState extends LobbyGameState {
             }
         }
 
+        //set all other players to innocent
         for (Player p : players) {
             playerRoles.put(TTT.getInstance().getGamePlayer(p), Role.INNOCENT);
         }
+
+        //Team calculating finished
+        System.out.println("ttt roles: "+playerRoles);
+
+
+        /*
+         * initialize gamesystem teams
+         */
 
         Team detectiveTeam = TTT.getInstance().getTeamManager().getTeam(Role.DETECTIVE.getName());
         Team traitorTeam = TTT.getInstance().getTeamManager().getTeam(Role.TRAITOR.getName());
         Team innocentTeam = TTT.getInstance().getTeamManager().getTeam(Role.INNOCENT.getName());
 
+        //calculate roles sizes
+        int detectiveSize = 0;
+        int traitorSize = 0;
+        for (Map.Entry<GamePlayer, Role> player : playerRoles.entrySet()) {
+            switch (player.getValue()) {
+                case TRAITOR: traitorSize++; break;
+                case DETECTIVE: detectiveSize++; break;
+            }
+        }
+
         detectiveTeam.setSize(detectiveSize);
         traitorTeam.setSize(traitorSize);
         innocentTeam.setSize(playerRoles.size() - (detectiveSize + traitorSize));
+
+
+        /*
+         * setting player teams & preparing players
+         */
 
         for (Map.Entry<GamePlayer, Role> role : playerRoles.entrySet()) {
             switch (role.getValue()) {
@@ -137,12 +172,14 @@ public class LobbyState extends LobbyGameState {
 
             TTT.getInstance().getMessenger().send(p, "§fDu bist in der Rolle " + gp.getTeam().getName());
 
-            Location location = null;
+            Location location;
             do {
                 location = SPAWNS.get(ROLE_RANDOM.nextInt(SPAWNS.size() - 1));
                 inUse.add(location);
                 p.teleport(location);
             } while (location != null && !inUse.contains(location));
         }
+
+        System.out.println("gamesystem team "+TTT.getInstance().getTeamManager().getTeams());
     }
 }

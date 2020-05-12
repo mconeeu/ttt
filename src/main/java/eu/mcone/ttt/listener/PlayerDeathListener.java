@@ -9,6 +9,7 @@ import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
 import eu.mcone.coresystem.api.bukkit.util.Messenger;
 import eu.mcone.coresystem.api.bukkit.world.CoreLocation;
 import eu.mcone.coresystem.api.core.player.SkinInfo;
+import eu.mcone.gameapi.api.GamePlugin;
 import eu.mcone.gameapi.api.event.team.TeamWonEvent;
 import eu.mcone.gameapi.api.gamestate.common.EndGameState;
 import eu.mcone.gameapi.api.player.GamePlayer;
@@ -35,15 +36,19 @@ public class PlayerDeathListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void on(PlayerDeathEvent e) {
-
         e.getDrops().clear();
 
         e.setDeathMessage(null);
         Player player = e.getEntity().getPlayer();
+        GamePlayer gp = TTT.getInstance().getGamePlayer(player);
         Player killer = (player.getKiller() != null ? player.getKiller() : TTT.getInstance().getDamageLogger().getKiller(player));
 
         player.getInventory().clear();
         player.getInventory().setArmorContents(new ItemStack[0]);
+
+        if (gp.getTeam() != null) {
+            gp.removeFromGame();
+        }
 
         Team traitors = TTT.getInstance().getTeamManager().getTeam(Role.TRAITOR.getName());
         Team detectives = TTT.getInstance().getTeamManager().getTeam(Role.DETECTIVE.getName());

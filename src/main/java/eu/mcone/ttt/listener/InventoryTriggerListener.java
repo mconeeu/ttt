@@ -81,7 +81,7 @@ public class InventoryTriggerListener implements Listener {
                                 p.getInventory().addItem(item.getItems());
                             } else {
                                 e.setCancelled(true);
-                                TTT.getInstance().getMessenger().send(p, "§cDu hast bereits alle Items gesammelt!");
+                                TTT.getInstance().getMessenger().send(p, "§4Du hast bereits alle Items gesammelt!");
                                 p.playSound(p.getLocation(), Sound.NOTE_BASS, 1, 1);
                             }
 
@@ -94,7 +94,7 @@ public class InventoryTriggerListener implements Listener {
                                 p.playSound(p.getLocation(), Sound.ANVIL_LAND, 1, 1);
                             } else {
                                 e.setCancelled(true);
-                                TTT.getInstance().getMessenger().send(p, "§cDu kannst diese Kiste erst nach der §fVorbereitungsphase§c öffnen!");
+                                TTT.getInstance().getMessenger().send(p, "§4Du kannst diese Kiste erst nach der §cVorbereitungsphase§4 öffnen!");
                             }
 
                             break;
@@ -136,6 +136,7 @@ public class InventoryTriggerListener implements Listener {
                                                         Bukkit.getScheduler().runTaskLater(TTT.getGamePlugin(), () -> {
                                                             tester_trap = false;
                                                             TTT.getInstance().getGameWorld().getBlockLocation("tester-block-1").getBlock().setType(Material.IRON_BLOCK);
+                                                            TTT.getInstance().getGameWorld().getBlockLocation("tester-block-2").getBlock().setType(Material.IRON_BLOCK);
                                                             TTT.getInstance().getGameWorld().getBlockLocation("tester-block-2").getBlock().setType(Material.IRON_BLOCK);
                                                             TTT.getInstance().getGameWorld().getBlockLocation("tester-block-3").getBlock().setType(Material.IRON_BLOCK);
                                                             TTT.getInstance().getGameWorld().getBlockLocation("tester-block-4").getBlock().setType(Material.IRON_BLOCK);
@@ -194,7 +195,7 @@ public class InventoryTriggerListener implements Listener {
                                                 TTT.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.INFO_MESSAGE, "§fDie Trator-Falle wurde ausgeführt!");
                                             } else {
                                                 e.setCancelled(true);
-                                                TTT.getInstance().getMessenger().send(p, "§4Die §lTraitor-Falle §4wurde bereits ausgeführt");
+                                                TTT.getInstance().getMessenger().send(p, "§4Die §c§lTraitor-Falle §4wurde bereits ausgeführt");
                                             }
                                         } else {
                                             TTT.getInstance().getMessenger().send(p, "§4Du musst ein Traitor dafür sein!");
@@ -204,7 +205,7 @@ public class InventoryTriggerListener implements Listener {
                                     }
                                 } else {
                                     e.setCancelled(true);
-                                    TTT.getInstance().getMessenger().send(p, "§4Als Detective kannst du den Traitor-Tester nicht betreten!");
+                                    TTT.getInstance().getMessenger().send(p, "§4Als Detective kannst du den §cTraitor-Tester§4 nicht betreten!");
                                 }
                             } else {
                                 e.setCancelled(true);
