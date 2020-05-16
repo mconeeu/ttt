@@ -3,16 +3,17 @@ package eu.mcone.ttt.state;
 import eu.mcone.coresystem.api.bukkit.CoreSystem;
 import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
 import eu.mcone.coresystem.api.bukkit.world.CoreLocation;
-import eu.mcone.gameapi.api.GameAPI;
 import eu.mcone.gameapi.api.event.gamestate.GameStateStopEvent;
 import eu.mcone.gameapi.api.gamestate.common.LobbyGameState;
 import eu.mcone.gameapi.api.player.GamePlayer;
+import eu.mcone.gameapi.api.player.GamePlayerState;
 import eu.mcone.gameapi.api.team.Team;
 import eu.mcone.ttt.TTT;
 import eu.mcone.ttt.listener.InventoryTriggerListener;
 import eu.mcone.ttt.player.TTTPass;
 import eu.mcone.ttt.player.TTTPlayer;
 import eu.mcone.ttt.roles.Role;
+import eu.mcone.ttt.scoreboard.LobbyObjective;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,6 +30,8 @@ public class LobbyState extends LobbyGameState {
     private final List<Location> inUse = new ArrayList<>();
 
     static {
+        setObjective(LobbyObjective.class);
+
         for (Map.Entry<String, CoreLocation> location : TTT.getInstance().getGameWorld().getLocations().entrySet()) {
             if (location.getKey().startsWith("ttt-spawn-")) {
                 SPAWNS.add(location.getValue().bukkit());
@@ -38,12 +41,13 @@ public class LobbyState extends LobbyGameState {
 
     @Override
     public void onStop(GameStateStopEvent event) {
-        int playing = TTT.getInstance().getPlayerManager().getPlaying().size();
+        int playing = TTT.getInstance().getPlayerManager().getPlayers(GamePlayerState.PLAYING).size();
         int detectives = (int) (playing * DETECTIVES_PROBABILITY) > 0 ? (int) (playing * DETECTIVES_PROBABILITY) : 1;
         int traitors = (int) (playing * TRAITOR_PROBABILITY) > 0 ? (int) (playing * TRAITOR_PROBABILITY) : 1;
 
-        List<Player> players = new ArrayList<>(TTT.getInstance().getPlayerManager().getPlaying());
+        List<Player> players = new ArrayList<>(TTT.getInstance().getPlayerManager().getPlayers(GamePlayerState.PLAYING));
         Map<GamePlayer, Role> playerRoles = new HashMap<>();
+
 
         /*
          * redeem passes
@@ -109,17 +113,14 @@ public class LobbyState extends LobbyGameState {
             playerRoles.put(TTT.getInstance().getGamePlayer(p), Role.INNOCENT);
         }
 
-        //Team calculating finished
-        System.out.println("ttt roles: "+playerRoles);
-
 
         /*
          * initialize gamesystem teams
          */
 
-        Team detectiveTeam = TTT.getInstance().getTeamManager().getTeam(Role.DETECTIVE.getName());
-        Team traitorTeam = TTT.getInstance().getTeamManager().getTeam(Role.TRAITOR.getName());
-        Team innocentTeam = TTT.getInstance().getTeamManager().getTeam(Role.INNOCENT.getName());
+        Team detectiveTeam = TTT.getInstance().getDetectiveTeam();
+        Team traitorTeam = TTT.getInstance().getTraitorTeam();
+        Team innocentTeam = TTT.getInstance().getInnocentTeam();
 
         //calculate roles sizes
         int detectiveSize = 0;
@@ -143,13 +144,13 @@ public class LobbyState extends LobbyGameState {
         for (Map.Entry<GamePlayer, Role> role : playerRoles.entrySet()) {
             switch (role.getValue()) {
                 case DETECTIVE:
-                    role.getKey().setTeam(detectiveTeam);
+                    role.getKey().changeTeamTo(detectiveTeam);
                     break;
                 case TRAITOR:
-                    role.getKey().setTeam(traitorTeam);
+                    role.getKey().changeTeamTo(traitorTeam);
                     break;
                 case INNOCENT:
-                    role.getKey().setTeam(innocentTeam);
+                    role.getKey().changeTeamTo(innocentTeam);
                     break;
 
             }
@@ -159,18 +160,18 @@ public class LobbyState extends LobbyGameState {
 
             p.getInventory().clear();
             p.getInventory().setItem(8, InventoryTriggerListener.IDENTIFY_STICK);
-            if (gp.getTeam().getName().equalsIgnoreCase(Role.DETECTIVE.getName())) {
+            if (gp.getTeam().equals(TTT.getInstance().getDetectiveTeam())) {
                 p.getInventory().setChestplate(ItemBuilder.createLeatherArmorItem(Material.LEATHER_CHESTPLATE, Color.BLUE).unbreakable(true).create());
             } else {
                 p.getInventory().setChestplate(ItemBuilder.createLeatherArmorItem(Material.LEATHER_CHESTPLATE, Color.GREEN).unbreakable(true).create());
             }
 
 
-            CoreSystem.getInstance().createTitle().title("§fDeine §lRolle§f:").subTitle(gp.getTeam().getName()).stay(4).fadeIn(1).fadeOut(2).send(p);
+            CoreSystem.getInstance().createTitle().title("§7Deine §f§lRolle§7:").subTitle(gp.getTeam().getLabel()).stay(4).fadeIn(1).fadeOut(2).send(p);
             p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 1);
             p.playSound(p.getLocation(), Sound.NOTE_PLING, 1, 1);
 
-            TTT.getInstance().getMessenger().send(p, "§fDu bist in der Rolle " + gp.getTeam().getName());
+            TTT.getInstance().getMessenger().send(p, "§fDu bist in der Rolle " + gp.getTeam().getLabel());
 
             Location location;
             do {

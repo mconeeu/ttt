@@ -1,18 +1,21 @@
 package eu.mcone.ttt.roles;
 
 import lombok.Getter;
+import org.bukkit.ChatColor;
 
+@Getter
 public enum Role {
 
-    INNOCENT("§aInnocent"),
-    DETECTIVE("§1Detective"),
-    TRAITOR("§cTraitor");
+    INNOCENT("Innocent", ChatColor.GREEN),
+    DETECTIVE("Detective", ChatColor.BLUE),
+    TRAITOR("Traitor", ChatColor.RED);
 
-    @Getter
     private final String name;
+    private final ChatColor color;
 
-    Role(String name) {
+    Role(String name, ChatColor color) {
         this.name = name;
+        this.color = color;
     }
 
     public static Role getRoleByName(String name) {
@@ -23,6 +26,10 @@ public enum Role {
         }
 
         return null;
+    }
+
+    public String getLabel() {
+        return color+name;
     }
 
 }

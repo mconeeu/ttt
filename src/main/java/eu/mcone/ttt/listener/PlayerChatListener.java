@@ -1,36 +1,32 @@
 package eu.mcone.ttt.listener;
 
-import eu.mcone.coresystem.api.bukkit.CoreSystem;
-import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
 import eu.mcone.gameapi.api.player.GamePlayer;
-import eu.mcone.gameapi.api.team.PlayingChat;
+import eu.mcone.gameapi.api.player.GamePlayerState;
+import eu.mcone.gameapi.api.team.TeamChatListener;
 import eu.mcone.ttt.TTT;
-import eu.mcone.ttt.roles.Role;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-public class PlayerChatListener extends PlayingChat {
+public class PlayerChatListener extends TeamChatListener {
 
     @Override
     public void onPlayingChat(String s, Player p, GamePlayer gp) {
-        for (Player t : TTT.getInstance().getPlayerManager().getPlaying()) {
+        for (Player t : TTT.getInstance().getPlayerManager().getPlayers(GamePlayerState.PLAYING)) {
             GamePlayer gt = TTT.getInstance().getGamePlayer(t);
 
             if (
-                    (gt.getTeam().getName().equals(Role.INNOCENT.getName())
-                            || gt.getTeam().getName().equals(Role.DETECTIVE.getName())
-                    ) && gp.getTeam().getName().equals(Role.TRAITOR.getName())
+                    (gt.getTeam().equals(TTT.getInstance().getInnocentTeam())
+                            || gt.getTeam().equals(TTT.getInstance().getDetectiveTeam())
+                    ) && gp.getTeam().equals(TTT.getInstance().getTraitorTeam())
             ) {
                 t.sendMessage(
-                        "§" + TTT.getInstance().getTeamManager().getTeam(Role.INNOCENT.getName()).getChatColor().getChar() + p.getName() + "§8:§7 " + s
+                        TTT.getInstance().getInnocentTeam().getColor() + p.getName() + "§8 »§7 " + s
                 );
             } else {
                 t.sendMessage(
-                        "§" + gp.getTeam().getChatColor().getChar() + p.getName() + "§8:§7 " + s
+                        gp.getTeam().getColor() + p.getName() + "§8 »§7 " + s
                 );
             }
         }
     }
+
 }

@@ -5,11 +5,10 @@ import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
 import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
 import eu.mcone.gameapi.api.event.player.GamePlayerLoadedEvent;
 import eu.mcone.gameapi.api.gamestate.common.InGameState;
+import eu.mcone.gameapi.api.gamestate.common.LobbyGameState;
 import eu.mcone.gameapi.api.player.PlayerManager;
-import eu.mcone.gameapi.api.team.TeamManager;
 import eu.mcone.ttt.TTT;
 import eu.mcone.ttt.player.TTTPlayer;
-import eu.mcone.ttt.scoreboard.LobbyObjective;
 import eu.mcone.ttt.state.EndState;
 import eu.mcone.ttt.state.LobbyState;
 import eu.mcone.ttt.state.MiddleState;
@@ -36,11 +35,9 @@ public class PlayerJoinListener implements Listener {
         player.setLevel(0);
 
         new TTTPlayer(e.getCorePlayer());
-        player.getInventory().setItem(8, InventoryTriggerListener.QUIT_ITEM);
+        player.getInventory().setItem(8, LobbyGameState.QUIT_ITEM);
 
         if (TTT.getInstance().getGameStateManager().getRunning() instanceof LobbyState) {
-            e.getCorePlayer().getScoreboard().setNewObjective(new LobbyObjective());
-
             for (CorePlayer cp : CoreSystem.getInstance().getOnlineCorePlayers()) {
                 if (cp.getScoreboard() != null) {
                     if (cp.getScoreboard().getObjective(DisplaySlot.SIDEBAR) != null) {
@@ -59,13 +56,12 @@ public class PlayerJoinListener implements Listener {
             player.getInventory().clear();
 
             player.getInventory().setItem(7, PlayerManager.SPECTATOR);
-            player.getInventory().setItem(8, InventoryTriggerListener.QUIT_ITEM);
+            player.getInventory().setItem(8, LobbyGameState.QUIT_ITEM);
             CoreSystem.getInstance().getWorldManager().getWorld(TTT.getInstance().getGameConfig().parseConfig().getLobby()).teleport(player, "game.spectator");
         } else if (TTT.getInstance().getGameStateManager().getRunning() instanceof EndState) {
             CoreSystem.getInstance().getWorldManager().getWorld(TTT.getInstance().getGameConfig().parseConfig().getLobby()).teleport(player, "spawn");
-            e.getCorePlayer().getScoreboard().setNewObjective(new LobbyObjective());
 
-            player.getInventory().setItem(8, InventoryTriggerListener.QUIT_ITEM);
+            player.getInventory().setItem(8, LobbyGameState.QUIT_ITEM);
             player.getInventory().setItem(7, new ItemBuilder(Material.STORAGE_MINECART, 1, 0).displayName("§3§lRucksack §8» §7§oZeige deine gesammelten Items an").create());
 
             for (CorePlayer all : CoreSystem.getInstance().getOnlineCorePlayers()) {

@@ -1,6 +1,7 @@
 package eu.mcone.ttt;
 
 import eu.mcone.coresystem.api.bukkit.CoreSystem;
+import eu.mcone.coresystem.api.bukkit.gamemode.Gamemode;
 import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
 import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
 import eu.mcone.coresystem.api.bukkit.world.CoreWorld;
@@ -8,20 +9,18 @@ import eu.mcone.gameapi.api.GamePlugin;
 import eu.mcone.gameapi.api.Option;
 import eu.mcone.gameapi.api.team.Team;
 import eu.mcone.ttt.commands.PassesCMD;
-import eu.mcone.ttt.commands.TTTCMD;
 import eu.mcone.ttt.commands.ShopCMD;
+import eu.mcone.ttt.commands.TTTCMD;
 import eu.mcone.ttt.gadgets.HealBlockGadget;
 import eu.mcone.ttt.listener.*;
 import eu.mcone.ttt.player.TTTPlayer;
 import eu.mcone.ttt.roles.Role;
-import eu.mcone.ttt.scoreboard.Tablist;
 import eu.mcone.ttt.state.EndState;
 import eu.mcone.ttt.state.InGameState;
 import eu.mcone.ttt.state.LobbyState;
 import eu.mcone.ttt.state.MiddleState;
 import lombok.Getter;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -33,15 +32,14 @@ import java.util.UUID;
 public class TTT extends GamePlugin {
 
     public TTT() {
-        super("TTT", ChatColor.RED, "ttt.prefix",
+        super(Gamemode.TTT, "ttt.prefix",
                 Option.BACKPACK_MANAGER_REGISTER_GADGET_CATEGORY,
                 Option.BACKPACK_MANAGER_REGISTER_OUTFIT_CATEGORY,
                 Option.BACKPACK_MANAGER_REGISTER_HAT_CATEGORY,
                 Option.BACKPACK_MANAGER_REGISTER_TRAIL_CATEGORY,
                 Option.BACKPACK_MANAGER_REGISTER_EXCLUSIVE_CATEGORY,
                 Option.BACKPACK_MANAGER_USE_RANK_BOOTS,
-                Option.USE_CUSTOM_TEAMS,
-                Option.WIN_METHOD_DEACTIVATED);
+                Option.TEAM_MANAGER_DISABLE_WIN_METHOD);
     }
 
     @Getter
@@ -52,6 +50,13 @@ public class TTT extends GamePlugin {
     @Getter
     private List<TTTPlayer> players;
 
+    @Getter
+    private Team traitorTeam;
+    @Getter
+    private Team detectiveTeam;
+    @Getter
+    private Team innocentTeam;
+
     @Override
     public void onGameEnable() {
         instance = this;
@@ -59,19 +64,39 @@ public class TTT extends GamePlugin {
         gameWorld = CoreSystem.getInstance().getWorldManager().getWorld(getGameConfig().parseConfig().getGameWorld());
 
         sendConsoleMessage("§aInitializing new GameState Handler...");
-        getGameStateManager().addGameStateFirst(new LobbyState()).addGameState(new MiddleState()).addGameState(new InGameState()).addGameState(new EndState()).startGame();
+        getGameStateManager()
+                .addGameState(new LobbyState())
+                .addGameState(new MiddleState())
+                .addGameState(new InGameState())
+                .addGameState(new EndState())
+                .startGame();
         getPlayerManager();
-        getDamageLogger();
-        getTeamManager().addTeamChat(new PlayerChatListener());
+        getTeamManager().setTeamChatListener(new PlayerChatListener());
 
         sendConsoleMessage("§aRegistering custom Teams");
-        getTeamManager().addCustomTeam(new Team(Role.TRAITOR.getName(), 1, "§cTraitor", ChatColor.RED, Color.RED, new ItemBuilder(Material.WOOL, 1, 12).create()));
-        getTeamManager().addCustomTeam(new Team(Role.DETECTIVE.getName(), 2, "§1Detective", ChatColor.BLUE, Color.BLUE, new ItemBuilder(Material.WOOL, 1, 11).create()));
-        getTeamManager().addCustomTeam(new Team(Role.INNOCENT.getName(), 3, "§aInnocent", ChatColor.GREEN, Color.GREEN, new ItemBuilder(Material.WOOL, 1, 13).create()));
+        traitorTeam = getTeamManager().registerNewTeam(
+                Role.TRAITOR.getName(),
+                Role.TRAITOR.getLabel(),
+                1,
+                ChatColor.RED,
+                new ItemBuilder(Material.WOOL, 1, 12).create()
+        );
+        detectiveTeam = getTeamManager().registerNewTeam(
+                Role.DETECTIVE.getName(),
+                Role.DETECTIVE.getLabel(),
+                2,
+                ChatColor.BLUE,
+                new ItemBuilder(Material.WOOL, 1, 11).create()
+        );
+        innocentTeam = getTeamManager().registerNewTeam(
+                Role.INNOCENT.getName(),
+                Role.INNOCENT.getLabel(),
+                3,
+                ChatColor.GREEN,
+                new ItemBuilder(Material.WOOL, 1, 13).create()
+        );
         getBackpackManager().setItemSlot(1);
         getBackpackManager().setFallbackSlot(1);
-
-        getTeamManager().addTeamTablist(Tablist.class);
 
         sendConsoleMessage("§aRegistering Commands and Listeners...");
         registerCommands(
@@ -99,9 +124,7 @@ public class TTT extends GamePlugin {
 
     @Override
     public void onGameDisable() {
-
         sendConsoleMessage("§cPlugin disabled!");
-
     }
 
     public TTTPlayer getTTTPlayer(CorePlayer cp) {

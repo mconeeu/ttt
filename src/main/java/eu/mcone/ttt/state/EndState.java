@@ -3,12 +3,14 @@ package eu.mcone.ttt.state;
 import eu.mcone.gameapi.api.event.gamestate.GameStateStopEvent;
 import eu.mcone.gameapi.api.gamestate.common.EndGameState;
 import eu.mcone.ttt.TTT;
+import eu.mcone.ttt.scoreboard.EndObjective;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class EndState extends EndGameState {
-    public EndState() {
-        super();
+
+    static {
+        setObjective(EndObjective.class);
     }
 
     @Override

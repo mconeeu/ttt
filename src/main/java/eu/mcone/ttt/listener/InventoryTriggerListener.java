@@ -3,12 +3,10 @@ package eu.mcone.ttt.listener;
 import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
 import eu.mcone.coresystem.api.bukkit.util.Messenger;
 import eu.mcone.gameapi.api.backpack.defaults.DefaultCategory;
-import eu.mcone.gameapi.api.gamestate.common.EndGameState;
 import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.ttt.TTT;
 import eu.mcone.ttt.inventorys.RollInventar;
 import eu.mcone.ttt.player.TTTItem;
-import eu.mcone.ttt.roles.Role;
 import eu.mcone.ttt.state.EndState;
 import eu.mcone.ttt.state.InGameState;
 import eu.mcone.ttt.state.LobbyState;
@@ -26,12 +24,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class InventoryTriggerListener implements Listener {
 
-
-    public static final ItemStack QUIT_ITEM = new ItemBuilder(Material.IRON_DOOR, 1, 0).displayName("§4§lVerlassem §8» §7§overlasse die Spielrunde.").create();
     public static final ItemStack ROLL_ITEM = new ItemBuilder(Material.EMERALD, 1, 0).displayName("§f§lRolle wählen §8» §7§oWähle deine Rolle aus.").create();
 
     public static final ItemStack IDENTIFY_STICK = new ItemBuilder(Material.STICK, 1, 0).displayName("§fIdentifizierer").create();
@@ -102,7 +97,7 @@ public class InventoryTriggerListener implements Listener {
                         case STONE_BUTTON: {
                             GamePlayer gamePlayer = TTT.getInstance().getGamePlayer(p);
                             if (TTT.getInstance().getGameStateManager().getRunning() instanceof InGameState) {
-                                if (!gamePlayer.getTeam().getName().equalsIgnoreCase(Role.DETECTIVE.getName())) {
+                                if (!gamePlayer.getTeam().equals(TTT.getInstance().getDetectiveTeam())) {
                                     if (TTT.getInstance().getGameWorld().getBlockLocation("tester-button").equals(e.getClickedBlock().getLocation())) {
                                         if (!insideTester) {
                                             TTT.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.INFO_MESSAGE, "§7Der Spieler §f" + p.getName() + "§7 hat den §fTraitor Tester §7betreten!");
@@ -150,7 +145,7 @@ public class InventoryTriggerListener implements Listener {
                                                 }
                                                 Bukkit.getScheduler().runTaskLater(TTT.getGamePlugin(), () -> {
 
-                                                    if (gamePlayer.getTeam().getName().equalsIgnoreCase(Role.TRAITOR.getName())) {
+                                                    if (gamePlayer.getTeam().equals(TTT.getInstance().getTraitorTeam())) {
                                                         TTT.getInstance().getGameWorld().getBlockLocation("tester-lamp-1").getBlock().setType(Material.REDSTONE_BLOCK);
                                                         TTT.getInstance().getGameWorld().getBlockLocation("tester-lamp-2").getBlock().setType(Material.REDSTONE_BLOCK);
                                                         p.playSound(p.getLocation(), Sound.WITHER_DEATH, 2, 2);
@@ -189,7 +184,7 @@ public class InventoryTriggerListener implements Listener {
                                         }
 
                                     } else if (TTT.getInstance().getGameWorld().getBlockLocation("tester-trap-button").equals(e.getClickedBlock().getLocation())) {
-                                        if (gamePlayer.getTeam().getName().equalsIgnoreCase(Role.TRAITOR.getName())) {
+                                        if (gamePlayer.getTeam().equals(TTT.getInstance().getTraitorTeam())) {
                                             if (!tester_trap) {
                                                 tester_trap = true;
                                                 TTT.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.INFO_MESSAGE, "§fDie Trator-Falle wurde ausgeführt!");

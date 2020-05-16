@@ -5,12 +5,6 @@ import org.bukkit.Bukkit;
 
 public class LobbyObjective extends eu.mcone.gameapi.api.scoreboard.LobbyObjective {
 
-//    private static int i = 0;
-
-    public LobbyObjective() {
-        super("TTT");
-    }
-
     @Override
     protected void onRegister(CorePlayer corePlayer) {
         super.onRegister(corePlayer);
@@ -26,4 +20,5 @@ public class LobbyObjective extends eu.mcone.gameapi.api.scoreboard.LobbyObjecti
         super.onReload(corePlayer);
         setScore(1, "§f  " + Bukkit.getOnlinePlayers().size());
     }
+
 }
