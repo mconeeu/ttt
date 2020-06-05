@@ -39,7 +39,7 @@ public class InventoryTriggerListener implements Listener {
     public static final ItemStack STONE_SWORD_ITEM = new ItemBuilder(Material.STONE_SWORD, 1, 0).displayName("§fSteinschwert").create();
     public static final ItemStack WOOD_SWORD_ITEM = new ItemBuilder(Material.WOOD_SWORD, 1, 0).displayName("§fHolzschwert").create();
     public static final ItemStack BOW_ITEM = new ItemBuilder(Material.BOW, 1, 0).displayName("§fBogen").create();
-    public static final ItemStack ARROWS_ITEM = new ItemBuilder(Material.ARROW, 32, 0).displayName("§fPfeile").create();
+    public static final ItemStack ARROWS_ITEM = new ItemBuilder(Material.ARROW, 32, 0).create();
 
     @EventHandler
     public void on(PlayerInteractEvent e) {
