@@ -8,12 +8,9 @@ import org.bukkit.entity.Player;
 
 public class PassesCMD extends CorePlayerCommand {
 
-
     public PassesCMD() {
         super("pass");
     }
-
-    //TODO ADD PASSES
 
     @Override
     public boolean onPlayerCommand(Player p, String[] args) {

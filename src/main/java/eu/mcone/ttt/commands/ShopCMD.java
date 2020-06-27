@@ -11,11 +11,10 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class ShopCMD extends CorePlayerCommand {
+
     public ShopCMD() {
         super("shop");
     }
-
-
 
     @Override
     public boolean onPlayerCommand(Player p, String[] args) {

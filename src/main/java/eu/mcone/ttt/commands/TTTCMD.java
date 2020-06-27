@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 
 public class TTTCMD extends CoreCommand {
 
-
     public TTTCMD() {
         super("ttt");
     }

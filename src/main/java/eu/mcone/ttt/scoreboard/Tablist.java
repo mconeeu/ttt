@@ -7,6 +7,8 @@ import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.ttt.TTT;
 import eu.mcone.ttt.roles.Role;
 
+import java.util.Objects;
+
 public class Tablist extends CoreScoreboard {
 
     @Override
@@ -23,7 +25,7 @@ public class Tablist extends CoreScoreboard {
                     TTT.getInstance().getInnocentTeam().getColor().toString()
             );
         } else {
-            team.priority(Role.getRoleByName(gp.getTeam().getName()).ordinal() * 10).prefix(
+            team.priority(Objects.requireNonNull(Role.getRoleByName(gp.getTeam().getName())).ordinal() * 10).prefix(
                     gp.getTeam().getColor().toString()
             );
         }
