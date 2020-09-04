@@ -13,7 +13,7 @@ public class TTTPlayer extends GamePlayer<TTTPlayerProfile> {
     @Getter
     private int traitorPasses, detectivePasses;
     @Getter
-    private Set<TTTItem> currentItems = new HashSet<>();
+    private final Set<TTTItem> currentItems = new HashSet<>();
     @Getter
     private TTTPass redeemedPass = null;
 

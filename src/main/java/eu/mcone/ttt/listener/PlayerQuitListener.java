@@ -6,7 +6,6 @@ import eu.mcone.gameapi.api.event.player.GamePlayerUnloadEvent;
 import eu.mcone.ttt.TTT;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.DisplaySlot;
 
 public class PlayerQuitListener implements Listener {

@@ -11,7 +11,6 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
@@ -19,13 +18,9 @@ public class GeneralPlayerListener implements Listener {
 
     @EventHandler
     public void onTrigger(InventoryClickEvent e) {
-        if ((TTT.getInstance().getGameStateManager().getRunning() instanceof LobbyState
+        e.setCancelled((TTT.getInstance().getGameStateManager().getRunning() instanceof LobbyState
                 || TTT.getInstance().getGameStateManager().getRunning() instanceof EndGameState)
-                && !e.getWhoClicked().getGameMode().equals(GameMode.CREATIVE)) {
-            e.setCancelled(true);
-        } else {
-            e.setCancelled(false);
-        }
+                && !e.getWhoClicked().getGameMode().equals(GameMode.CREATIVE));
     }
 
 
@@ -43,12 +38,8 @@ public class GeneralPlayerListener implements Listener {
 
     @EventHandler
     public void onItemPickUp(PlayerPickupItemEvent e) {
-        if (TTT.getInstance().getGameStateManager().getRunning() instanceof LobbyState
-                || TTT.getInstance().getGameStateManager().getRunning() instanceof EndGameState) {
-            e.setCancelled(true);
-        } else {
-            e.setCancelled(false);
-        }
+        e.setCancelled(TTT.getInstance().getGameStateManager().getRunning() instanceof LobbyState
+                || TTT.getInstance().getGameStateManager().getRunning() instanceof EndGameState);
     }
 
     @EventHandler
@@ -58,21 +49,13 @@ public class GeneralPlayerListener implements Listener {
 
     @EventHandler
     public void on(BlockBreakEvent e) {
-        if (e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
-            e.setCancelled(false);
-        } else {
-            e.setCancelled(true);
-        }
+        e.setCancelled(!e.getPlayer().getGameMode().equals(GameMode.CREATIVE));
     }
 
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
-        if (TTT.getInstance().getGameStateManager().getRunning() instanceof LobbyState
-                || TTT.getInstance().getGameStateManager().getRunning() instanceof EndGameState) {
-            e.setCancelled(true);
-        } else {
-            e.setCancelled(false);
-        }
+        e.setCancelled(TTT.getInstance().getGameStateManager().getRunning() instanceof LobbyState
+                || TTT.getInstance().getGameStateManager().getRunning() instanceof EndGameState);
     }
 }

@@ -1,12 +1,8 @@
 package eu.mcone.ttt.listener;
 
 import eu.mcone.coresystem.api.bukkit.CoreSystem;
-import eu.mcone.gameapi.api.gamestate.common.EndGameState;
 import eu.mcone.ttt.TTT;
-import eu.mcone.ttt.state.EndState;
 import eu.mcone.ttt.state.InGameState;
-import eu.mcone.ttt.state.LobbyState;
-import eu.mcone.ttt.state.MiddleState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

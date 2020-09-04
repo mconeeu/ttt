@@ -70,7 +70,7 @@ public class PlayerDeathListener implements Listener {
                         killer.setLevel(killer.getLevel() + 3);
                     } else {
                         TTT.getInstance().getMessenger().send(killer, "§7Du hast einen §1Detective §7als §aInnocent§7 getötet §8[§a-40 Karma§8]");
-                        if (gamePlayer.getStats().getGoal() >= 40) {
+                        if (gamePlayer.getStats().getGoals() >= 40) {
                             gamePlayer.getStats().removeGoals(40);
                         } else {
                             gamePlayer.getStats().setGoals(0);
@@ -81,7 +81,7 @@ public class PlayerDeathListener implements Listener {
                         killer.setLevel(killer.getLevel() + 2);
                     } else {
                         TTT.getInstance().getMessenger().send(killer, "§7Du hast einen Innocent getötet §8[§a-20 Karma§8]");
-                        if (gamePlayer.getStats().getGoal() >= 20) {
+                        if (gamePlayer.getStats().getGoals() >= 20) {
                             gamePlayer.getStats().removeGoals(20);
                         } else {
                             gamePlayer.getStats().setGoals(0);

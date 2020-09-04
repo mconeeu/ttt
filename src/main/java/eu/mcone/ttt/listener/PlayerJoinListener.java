@@ -6,6 +6,7 @@ import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
 import eu.mcone.gameapi.api.event.player.GamePlayerLoadedEvent;
 import eu.mcone.gameapi.api.gamestate.common.InGameState;
 import eu.mcone.gameapi.api.gamestate.common.LobbyGameState;
+import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.gameapi.api.player.PlayerManager;
 import eu.mcone.ttt.TTT;
 import eu.mcone.ttt.player.TTTPlayer;
@@ -24,6 +25,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void on(GamePlayerLoadedEvent e) {
         Player player = e.getBukkitPlayer();
+        GamePlayer gamePlayer = TTT.getInstance().getGamePlayer(player);
 
         player.setGameMode(GameMode.SURVIVAL);
 
@@ -46,6 +48,7 @@ public class PlayerJoinListener implements Listener {
                 }
             }
 
+            gamePlayer.setLastUsedBackPackItemInventar();
             player.getInventory().setItem(7, new ItemBuilder(Material.STORAGE_MINECART, 1, 0).displayName("§3§lRucksack §8» §7§oZeige deine gesammelten Items an").create());
             player.getInventory().setItem(0, InventoryTriggerListener.ROLL_ITEM);
 

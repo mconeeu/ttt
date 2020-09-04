@@ -4,7 +4,6 @@ import eu.mcone.coresystem.api.bukkit.inventory.CoreInventory;
 import eu.mcone.coresystem.api.bukkit.inventory.InventoryOption;
 import eu.mcone.coresystem.api.bukkit.inventory.InventorySlot;
 import eu.mcone.ttt.TTT;
-import eu.mcone.ttt.gadgets.DetectiveGadgets;
 import eu.mcone.ttt.gadgets.InnocentGadgets;
 import org.bukkit.entity.Player;
 

@@ -20,7 +20,7 @@ public class EndObjective extends LobbyObjective {
         entry.setTitle("§7§l⚔ §c§l§nTTT");
         entry.setScore(6, "");
         entry.setScore(5, "§8» §7Karma:");
-        entry.setScore(4, "    §f§l" + gamePlayer.getStats().getGoal());
+        entry.setScore(4, "    §f§l" + gamePlayer.getStats().getGoals());
         entry.setScore(3, "");
         entry.setScore(2, "§8» §7Kills:");
         onReload(corePlayer, entry);

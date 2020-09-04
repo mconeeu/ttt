@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 
 public class DetectiveShopInventory extends CoreInventory {
 
-
     private int i = 10;
 
     public DetectiveShopInventory(Player player) {

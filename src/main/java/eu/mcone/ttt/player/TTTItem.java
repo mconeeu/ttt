@@ -1,11 +1,7 @@
 package eu.mcone.ttt.player;
 
-import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
-import eu.mcone.ttt.TTT;
 import eu.mcone.ttt.listener.InventoryTriggerListener;
 import lombok.Getter;
-import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
 @Getter

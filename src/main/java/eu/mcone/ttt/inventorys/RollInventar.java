@@ -4,15 +4,14 @@ import eu.mcone.coresystem.api.bukkit.inventory.CoreInventory;
 import eu.mcone.coresystem.api.bukkit.inventory.InventoryOption;
 import eu.mcone.coresystem.api.bukkit.inventory.InventorySlot;
 import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
-import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.ttt.TTT;
 import eu.mcone.ttt.player.TTTPass;
 import eu.mcone.ttt.player.TTTPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 
 public class RollInventar extends CoreInventory {
+
     public RollInventar(Player player) {
         super("§fWähle deine Rolle", player, InventorySlot.ROW_3, InventoryOption.FILL_EMPTY_SLOTS);
 
