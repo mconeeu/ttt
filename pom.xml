@@ -44,6 +44,18 @@
             </roles>
             <timezone>Europe/Berlin</timezone>
         </developer>
+        <developer>
+            <id>rufusmaiwald</id>
+            <name>Rufus Maiwald</name>
+            <url>https://rufusmaiwald.de</url>
+            <organization>MC ONE</organization>
+            <organizationUrl>https://www.mcone.eu</organizationUrl>
+            <roles>
+                <role>administrator</role>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Berlin</timezone>
+        </developer>
     </developers>
 
     <organization>
@@ -92,17 +104,11 @@
             </resource>
         </resources>
     </build>
-    <distributionManagement>
-        <repository>
-            <id>mcone-systems</id>
-            <url>https://repo.onegaming.group/repository/mcone-systems/</url>
-        </repository>
-    </distributionManagement>
 
     <repositories>
         <repository>
-            <id>mcone-systems</id>
-            <url>https://repo.mcone.eu/repository/mcone-systems/</url>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/mconeeu/artifacts</url>
         </repository>
         <repository>
             <id>fawe-repo</id>
