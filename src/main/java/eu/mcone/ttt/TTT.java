@@ -7,16 +7,19 @@ import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
 import eu.mcone.coresystem.api.bukkit.world.CoreWorld;
 import eu.mcone.gameapi.api.GamePlugin;
 import eu.mcone.gameapi.api.Option;
+import eu.mcone.gameapi.api.gamestate.common.EndGameState;
+import eu.mcone.gameapi.api.gamestate.common.InGameState;
 import eu.mcone.gameapi.api.team.Team;
-import eu.mcone.ttt.commands.PassesCMD;
+import eu.mcone.ttt.commands.PassCMD;
 import eu.mcone.ttt.commands.ShopCMD;
 import eu.mcone.ttt.commands.TTTCMD;
-import eu.mcone.ttt.gadgets.HealBlockGadget;
+import eu.mcone.ttt.listener.HealBlockGadgetListener;
 import eu.mcone.ttt.listener.*;
 import eu.mcone.ttt.player.TTTPlayer;
 import eu.mcone.ttt.roles.Role;
-import eu.mcone.ttt.state.EndState;
-import eu.mcone.ttt.state.InGameState;
+import eu.mcone.ttt.scoreboard.TTTEndObjective;
+import eu.mcone.ttt.scoreboard.TTTInGameObjective;
+import eu.mcone.ttt.scoreboard.TTTTablist;
 import eu.mcone.ttt.state.LobbyState;
 import eu.mcone.ttt.state.MiddleState;
 import lombok.Getter;
@@ -33,12 +36,8 @@ public class TTT extends GamePlugin {
 
     public TTT() {
         super(Gamemode.TTT, "ttt.prefix",
-                Option.BACKPACK_MANAGER_REGISTER_GADGET_CATEGORY,
-                Option.BACKPACK_MANAGER_REGISTER_OUTFIT_CATEGORY,
-                Option.BACKPACK_MANAGER_REGISTER_HAT_CATEGORY,
-                Option.BACKPACK_MANAGER_REGISTER_TRAIL_CATEGORY,
-                Option.BACKPACK_MANAGER_REGISTER_EXCLUSIVE_CATEGORY,
-                Option.BACKPACK_MANAGER_USE_RANK_BOOTS,
+                Option.BACKPACK_MANAGER_REGISTER_ALL_DEFAULT_CATEGORIES,
+                Option.HOTBAR_SET_ITEMS,
                 Option.TEAM_MANAGER_DISABLE_WIN_METHOD);
     }
 
@@ -67,10 +66,13 @@ public class TTT extends GamePlugin {
         getGameStateManager()
                 .addGameState(new LobbyState())
                 .addGameState(new MiddleState())
-                .addGameState(new InGameState())
-                .addGameState(new EndState())
+                .addGameState(new InGameState(60*45))
+                .addGameState(new EndGameState())
                 .startGame();
         getPlayerManager();
+        InGameState.setScoreboard(TTTTablist.class);
+        InGameState.setObjective(TTTInGameObjective.class);
+        EndGameState.setObjective(TTTEndObjective.class);
         getTeamManager().setTeamChatListener(new PlayerChatListener());
 
         sendConsoleMessage("§aRegistering custom Teams");
@@ -95,14 +97,12 @@ public class TTT extends GamePlugin {
                 ChatColor.GREEN,
                 new ItemBuilder(Material.WOOL, 1, 13).create()
         );
-        getBackpackManager().setItemSlot(1);
-        getBackpackManager().setFallbackSlot(1);
 
         sendConsoleMessage("§aRegistering Commands and Listeners...");
         registerCommands(
                 new ShopCMD(),
                 new TTTCMD(),
-                new PassesCMD()
+                new PassCMD()
         );
 
         registerEvents(
@@ -116,7 +116,7 @@ public class TTT extends GamePlugin {
                 new GameEndListener(),
                 new PlayerMoveListener(),
                 new NpcInteractListener(),
-                new HealBlockGadget()
+                new HealBlockGadgetListener()
         );
 
         sendConsoleMessage("§aVersion §f" + this.getDescription().getVersion() + "§a enabled...");

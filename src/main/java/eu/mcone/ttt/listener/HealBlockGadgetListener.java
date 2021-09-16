@@ -1,6 +1,7 @@
-package eu.mcone.ttt.gadgets;
+package eu.mcone.ttt.listener;
 
 import eu.mcone.ttt.TTT;
+import eu.mcone.ttt.gadgets.DetectiveGadget;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -9,26 +10,21 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
-public class HealBlockGadget implements Listener {
+public class HealBlockGadgetListener implements Listener {
 
     public static ArrayList<Location> HealblockLocation = new ArrayList<>();
     private int Gadgetcount = 0;
-
 
     @EventHandler
     public void onPlace(BlockPlaceEvent e) {
         Player player = e.getPlayer();
         Block block = e.getBlock();
 
-        if (block.getType().equals(DetectiveGadgets.HEAL_STATION.getItem().getType())) {
+        if (block.getType().equals(DetectiveGadget.HEAL_STATION.getItem().getType())) {
             HealblockLocation.add(block.getLocation());
             player.playSound(player.getLocation(), Sound.FIREWORK_TWINKLE, 1, 1);
             e.setCancelled(false);
@@ -60,4 +56,5 @@ public class HealBlockGadget implements Listener {
             }
         }
     }
+
 }

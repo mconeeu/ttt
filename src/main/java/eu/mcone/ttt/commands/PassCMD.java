@@ -6,9 +6,9 @@ import eu.mcone.ttt.player.TTTPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class PassesCMD extends CorePlayerCommand {
+public class PassCMD extends CorePlayerCommand {
 
-    public PassesCMD() {
+    public PassCMD() {
         super("pass");
     }
 

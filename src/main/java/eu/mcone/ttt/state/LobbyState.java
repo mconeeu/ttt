@@ -13,7 +13,7 @@ import eu.mcone.ttt.listener.InventoryTriggerListener;
 import eu.mcone.ttt.player.TTTPass;
 import eu.mcone.ttt.player.TTTPlayer;
 import eu.mcone.ttt.roles.Role;
-import eu.mcone.ttt.scoreboard.LobbyObjective;
+import eu.mcone.ttt.scoreboard.TTTLobbyObjective;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,7 +30,7 @@ public class LobbyState extends LobbyGameState {
     private final List<Location> inUse = new ArrayList<>();
 
     static {
-        setObjective(LobbyObjective.class);
+        setObjective(TTTLobbyObjective.class);
 
         for (Map.Entry<String, CoreLocation> location : TTT.getInstance().getGameWorld().getLocations().entrySet()) {
             if (location.getKey().startsWith("ttt-spawn-")) {

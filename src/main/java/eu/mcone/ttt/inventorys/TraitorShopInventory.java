@@ -4,7 +4,7 @@ import eu.mcone.coresystem.api.bukkit.inventory.CoreInventory;
 import eu.mcone.coresystem.api.bukkit.inventory.InventoryOption;
 import eu.mcone.coresystem.api.bukkit.inventory.InventorySlot;
 import eu.mcone.ttt.TTT;
-import eu.mcone.ttt.gadgets.TraitorGadgets;
+import eu.mcone.ttt.gadgets.TraitorGadget;
 import org.bukkit.entity.Player;
 
 public class TraitorShopInventory extends CoreInventory {
@@ -14,7 +14,7 @@ public class TraitorShopInventory extends CoreInventory {
     public TraitorShopInventory(Player player) {
         super("§cTraitor Shop", player, InventorySlot.ROW_3, InventoryOption.FILL_EMPTY_SLOTS);
 
-        for (TraitorGadgets gadgets : TraitorGadgets.values()) {
+        for (TraitorGadget gadgets : TraitorGadget.values()) {
             setItem(i, gadgets.getItem(), e -> {
                         player.closeInventory();
 

@@ -4,11 +4,11 @@ import eu.mcone.coresystem.api.bukkit.CoreSystem;
 import eu.mcone.coresystem.api.bukkit.npc.NpcData;
 import eu.mcone.coresystem.api.bukkit.npc.data.PlayerNpcData;
 import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
-import eu.mcone.coresystem.api.bukkit.util.Messenger;
 import eu.mcone.coresystem.api.bukkit.world.CoreLocation;
 import eu.mcone.coresystem.api.core.player.SkinInfo;
+import eu.mcone.gameapi.api.HotbarItem;
+import eu.mcone.gameapi.api.broadcast.WinBroadcast;
 import eu.mcone.gameapi.api.gamestate.common.EndGameState;
-import eu.mcone.gameapi.api.gamestate.common.LobbyGameState;
 import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.gameapi.api.player.PlayerManager;
 import eu.mcone.gameapi.api.team.Team;
@@ -97,15 +97,15 @@ public class PlayerDeathListener implements Listener {
 
             Location loc = player.getLocation();
 
-            gp.removeFromGame();
+            gp.removeFromGame(false);
             System.out.println(TTT.getInstance().getTeamManager().getTeams());
 
             if (traitors.getPlayers().size() > 0 && detectives.getPlayers().size() == 0 && innocents.getPlayers().size() == 0) {
-                TTT.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.INFO_MESSAGE, "§7Die §c§lTraitor §7haben das Spiel gewonnen!");
+                TTT.getInstance().getMessenger().broadcast(new WinBroadcast(traitors));
                 TTT.getInstance().getTeamManager().stopGameWithWinner(traitors);
                 return;
             } else if (traitors.getPlayers().size() == 0 && (detectives.getPlayers().size() > 0 || innocents.getPlayers().size() > 0)) {
-                TTT.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.INFO_MESSAGE, "§7Die §a§lInnocents §7haben das Spiel gewonnen!");
+                TTT.getInstance().getMessenger().broadcast(new WinBroadcast(innocents));
                 TTT.getInstance().getTeamManager().stopGameWithWinner(innocents);
                 return;
             }
@@ -135,7 +135,7 @@ public class PlayerDeathListener implements Listener {
             player.getInventory().clear();
 
             player.getInventory().setItem(7, PlayerManager.SPECTATOR);
-            player.getInventory().setItem(8, LobbyGameState.QUIT_ITEM);
+            player.getInventory().setItem(8, HotbarItem.QUIT);
 
             CoreSystem.getInstance().createActionBar()
                     .message("§c§oDu bist gestorben")

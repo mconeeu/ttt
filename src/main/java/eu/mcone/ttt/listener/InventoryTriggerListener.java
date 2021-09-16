@@ -1,14 +1,12 @@
 package eu.mcone.ttt.listener;
 
+import eu.mcone.coresystem.api.bukkit.broadcast.SimpleBroadcast;
 import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
-import eu.mcone.coresystem.api.bukkit.util.Messenger;
-import eu.mcone.gameapi.api.backpack.defaults.DefaultCategory;
+import eu.mcone.gameapi.api.gamestate.common.InGameState;
 import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.ttt.TTT;
 import eu.mcone.ttt.inventorys.RollInventar;
 import eu.mcone.ttt.player.TTTItem;
-import eu.mcone.ttt.state.EndState;
-import eu.mcone.ttt.state.InGameState;
 import eu.mcone.ttt.state.LobbyState;
 import eu.mcone.ttt.state.MiddleState;
 import org.bukkit.Bukkit;
@@ -35,34 +33,19 @@ public class InventoryTriggerListener implements Listener {
     public static boolean insideTester = false;
     public static ArrayList<Player> playerTester = new ArrayList<>();
 
-    public static final ItemStack IRON_SWORD_ITEM = new ItemBuilder(Material.IRON_SWORD, 1, 0).displayName("§fEisenschwert").create();
-    public static final ItemStack STONE_SWORD_ITEM = new ItemBuilder(Material.STONE_SWORD, 1, 0).displayName("§fSteinschwert").create();
-    public static final ItemStack WOOD_SWORD_ITEM = new ItemBuilder(Material.WOOD_SWORD, 1, 0).displayName("§fHolzschwert").create();
-    public static final ItemStack BOW_ITEM = new ItemBuilder(Material.BOW, 1, 0).displayName("§fBogen").create();
-    public static final ItemStack ARROWS_ITEM = new ItemBuilder(Material.ARROW, 32, 0).create();
-
     @EventHandler
     public void on(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             ItemStack itemStack = e.getItem();
             if (itemStack != null) {
-                if (TTT.getInstance().getGameStateManager().getRunning() instanceof LobbyState
-                        || TTT.getInstance().getGameStateManager().getRunning() instanceof EndState) {
-                    if (itemStack.getType().equals(Material.IRON_DOOR)) {
-                        p.performCommand("hub");
-                    } else if (itemStack.getType().equals(Material.EMERALD)) {
+                if (TTT.getInstance().getGameStateManager().getRunning() instanceof LobbyState) {
+                    if (itemStack.getType().equals(Material.EMERALD)) {
                         new RollInventar(p);
-                    } else if (itemStack.hasItemMeta()) {
-                        if (e.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§3§lRucksack §8» §7§oZeige deine gesammelten Items an")) {
-                            e.setCancelled(true);
-                            TTT.getInstance().getBackpackManager().openBackpackInventory(DefaultCategory.GADGET.name(), p);
-                        }
-                        e.setCancelled(true);
                     }
                 }
             }
-            if (TTT.getInstance().getGameStateManager().getRunning() instanceof eu.mcone.ttt.state.InGameState || TTT.getInstance().getGameStateManager().getRunning() instanceof MiddleState) {
+            if (TTT.getInstance().getGameStateManager().getRunning() instanceof InGameState || TTT.getInstance().getGameStateManager().getRunning() instanceof MiddleState) {
                 if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock() != null) {
                     Material clicked = e.getClickedBlock().getType();
                     switch (clicked) {
@@ -83,7 +66,7 @@ public class InventoryTriggerListener implements Listener {
                             break;
                         }
                         case ENDER_CHEST: {
-                            if (TTT.getInstance().getGameStateManager().getRunning() instanceof eu.mcone.ttt.state.InGameState) {
+                            if (TTT.getInstance().getGameStateManager().getRunning() instanceof InGameState) {
                                 e.getClickedBlock().setType(Material.AIR);
                                 p.getInventory().addItem(TTTItem.IRON_SWORD.getItems());
                                 p.playSound(p.getLocation(), Sound.ANVIL_LAND, 1, 1);
@@ -100,7 +83,8 @@ public class InventoryTriggerListener implements Listener {
                                 if (!gamePlayer.getTeam().equals(TTT.getInstance().getDetectiveTeam())) {
                                     if (TTT.getInstance().getGameWorld().getBlockLocation("tester-button").equals(e.getClickedBlock().getLocation())) {
                                         if (!insideTester) {
-                                            TTT.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.INFO_MESSAGE, "§7Der Spieler §f" + p.getName() + "§7 hat den §fTraitor Tester §7betreten!");
+                                            // TODO: Add specific broadcast
+                                            TTT.getInstance().getMessenger().broadcast(new SimpleBroadcast("§7Der Spieler §f" + p.getName() + "§7 hat den §fTraitor Tester §7betreten!"));
                                             TTT.getInstance().getGameWorld().teleportSilently(p, "tester-inside-spawn");
                                             insideTester = true;
                                             playerTester.add(p);
@@ -187,7 +171,7 @@ public class InventoryTriggerListener implements Listener {
                                         if (gamePlayer.getTeam().equals(TTT.getInstance().getTraitorTeam())) {
                                             if (!tester_trap) {
                                                 tester_trap = true;
-                                                TTT.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.INFO_MESSAGE, "§fDie Trator-Falle wurde ausgeführt!");
+                                                TTT.getInstance().getMessenger().broadcast(new SimpleBroadcast("§fDie Trator-Falle wurde ausgeführt!"));
                                             } else {
                                                 e.setCancelled(true);
                                                 TTT.getInstance().getMessenger().send(p, "§4Die §c§lTraitor-Falle §4wurde bereits ausgeführt");

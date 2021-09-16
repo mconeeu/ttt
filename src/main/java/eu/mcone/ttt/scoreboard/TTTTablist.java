@@ -9,7 +9,7 @@ import eu.mcone.ttt.roles.Role;
 
 import java.util.Objects;
 
-public class Tablist extends CoreScoreboard {
+public class TTTTablist extends CoreScoreboard {
 
     @Override
     public void modifyTeam(CorePlayer o, CorePlayer p, CoreScoreboardEntry team) {
